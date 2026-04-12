@@ -23,4 +23,5 @@ export * from "./dtos/vendor-recurring-item-mapping.dto.interface";
 export * from "./dtos/vendor.dto.interface";
 
 export * from "./base-response.interface";
+export * from "./login.dto.interface";
 export * from "./login.response.interface";
