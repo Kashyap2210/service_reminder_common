@@ -1,0 +1,20 @@
+{
+  "name": "service_reminder_common",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Kashyap2210/service_reminder_common#readme",
+  "bugs": {
+    "url": "https://github.com/Kashyap2210/service_reminder_common/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kashyap2210/service_reminder_common.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
