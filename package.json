@@ -21,10 +21,10 @@
     "full-publish": "npm run build && npm version patch && git push --follow-tags && npm publish",
     "major-publish": "npm version major",
     "minor-publish": "npm version minor",
-    "publish:beta": "npm run build && npm version prerelease --preid=beta && npm publish --tag beta && git push --follow-tags",
+    "publish:beta": "npm run build && npm version prerelease --preid=beta && git push --follow-tags && npm publish --tag beta",
     "link": "npm run build && npm link",
     "preversion": "npm run build",
-    "postversion": "git push --follow-tags && npm publish"
+    "postversion": "git push --follow-tags"
   },
   "dependencies": {
     "typescript": "^5.7.3"
