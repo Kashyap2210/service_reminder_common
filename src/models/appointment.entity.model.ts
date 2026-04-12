@@ -2,10 +2,10 @@ import { AppointmentAction } from "../enums/appointment-action.enum";
 import { AppointmentStatus } from "../enums/appointment-status.enum";
 import { AppointmentType } from "../enums/appointment-type.enum";
 import { appointmentFlowConfig } from "../flow-configs/appointment-flow.config";
-import { BadRequestException } from "../helpers/error";
 import { IAppointmentEntity } from "../interfaces/entities/appointment.entity.interface";
 import { IUserEntity } from "../interfaces/entities/user.entity.interface";
 import { Nullable } from "../types/types.generic";
+import { BadRequestException } from "../utils";
 
 export class AppointmentModel implements IAppointmentEntity {
   id: number = 0;

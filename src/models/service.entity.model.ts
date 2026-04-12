@@ -2,10 +2,10 @@ import { AppointmentType } from "../enums/appointment-type.enum";
 import { ServiceAction } from "../enums/service-action.enum";
 import { ServiceStatus } from "../enums/service-status.enum";
 import { serviceFlowConfig } from "../flow-configs/service-flow.config";
-import { BadRequestException } from "../helpers/error";
 import { IServiceEntity } from "../interfaces/entities/service.entity.interface";
 import { IUserEntity } from "../interfaces/entities/user.entity.interface";
 import { Nullable } from "../types/types.generic";
+import { BadRequestException } from "../utils";
 
 export class ServiceModel implements IServiceEntity {
   id: number = 0;
