@@ -29,4 +29,8 @@ export class DateCodeUtils {
       date.getDate() === day
     );
   }
+
+  static getCurrentYear(): number {
+    return new Date().getFullYear();
+  }
 }
