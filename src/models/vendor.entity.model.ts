@@ -7,6 +7,7 @@ export class VendorModel implements IVendorEntity {
   contactNo: string = "";
   email: Nullable<string> = null;
   userId: number = 0;
+  address: string = "";
 
   createdOn: number = 0;
   updatedOn: number = 0;

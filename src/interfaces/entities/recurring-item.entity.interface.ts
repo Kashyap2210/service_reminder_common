@@ -10,6 +10,6 @@ export interface IRecurringItemEntity extends IAuditColumnEntity {
   // vendorId: Nullable<number>;
   servicePeriod: number;
   servicePeriodUnit: ServicePeriodUnit;
-  servicePlaceAddress: Nullable<string>;
+  // servicePlaceAddress: Nullable<string>;
   userId: number;
 }
