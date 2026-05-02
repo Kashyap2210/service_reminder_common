@@ -10,6 +10,11 @@ export class DateCodeUtils {
   stringifiedDateCode: string;
   constructor(private readonly dateCode: string | number) {
     this.stringifiedDateCode = String(this.dateCode);
+    if (!this.isValidYYYYMMDD()) {
+      throw new Error(
+        `Invalid date code: "${this.stringifiedDateCode}". Expected format: YYYYMMDD.`,
+      );
+    }
   }
 
   isValidYYYYMMDD(): boolean {
@@ -28,6 +33,19 @@ export class DateCodeUtils {
       date.getMonth() === month - 1 &&
       date.getDate() === day
     );
+  }
+
+  toLongDateString(): string {
+    const s = this.stringifiedDateCode;
+    const year = parseInt(s.substring(0, 4), 10);
+    const month = parseInt(s.substring(4, 6), 10);
+    const day = parseInt(s.substring(6, 8), 10);
+
+    return new Date(year, month - 1, day).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   }
 
   static getCurrentYear(): number {
