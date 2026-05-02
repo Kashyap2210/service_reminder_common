@@ -4,3 +4,4 @@ export * from "./entitiy-list-entity-model-map";
 export * from "./entity.utils";
 export * from "./error.utils";
 export * from "./helper.fns";
+export * from "./sql-utils";

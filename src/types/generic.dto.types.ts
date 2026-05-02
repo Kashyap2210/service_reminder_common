@@ -1,5 +1,6 @@
 import { IAuditColumnEntity } from "../helpers/audit-column.entity.interface";
 import { EntityList, EntityType } from "../utils/entity.utils";
+import { OrderByDirection } from "../utils/sql-utils";
 
 export type IEntityCreateDto<T> = Omit<T, "id" | keyof IAuditColumnEntity>;
 
@@ -12,6 +13,8 @@ export type IEntityFilterIncludeData<K extends EntityList = EntityList> = {
   name: K;
   include: IEntityFilterData<EntityType<K>>;
   columnKeys?: (keyof EntityType<K>)[];
+  orderBy?: Partial<Record<keyof EntityType<K>, OrderByDirection>>;
+  limit?: number;
 };
 
 export type IEntityFilterData<T> = {
@@ -19,6 +22,8 @@ export type IEntityFilterData<T> = {
 } & {
   columnKeys?: (keyof T)[];
   entities?: IEntityFilterIncludeData<EntityList>[];
+  orderBy?: Partial<Record<keyof T, OrderByDirection>>;
+  limit?: number;
 };
 
 export type ISearchV2Response = {
