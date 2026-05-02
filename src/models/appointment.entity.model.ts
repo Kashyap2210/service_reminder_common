@@ -24,7 +24,7 @@ export class AppointmentModel implements IAppointmentEntity {
 
   private constructor() {}
 
-  static fromEntity(entity: IAppointmentEntity): AppointmentModel {
+  static populateFromEntity(entity: IAppointmentEntity): AppointmentModel {
     return Object.assign(new AppointmentModel(), entity);
   }
 

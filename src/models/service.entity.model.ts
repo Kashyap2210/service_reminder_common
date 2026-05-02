@@ -28,7 +28,7 @@ export class ServiceModel implements IServiceEntity {
 
   private constructor() {}
 
-  static fromEntity(entity: IServiceEntity): ServiceModel {
+  static populateFromEntity(entity: IServiceEntity): ServiceModel {
     return Object.assign(new ServiceModel(), entity);
   }
 

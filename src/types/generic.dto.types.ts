@@ -1,21 +1,23 @@
-import { IAuditColumnEntity } from '../helpers/audit-column.entity.interface';
-import { EntityList, EntityType } from '../utils/entity.utils';
+import { IAuditColumnEntity } from "../helpers/audit-column.entity.interface";
+import { EntityList, EntityType } from "../utils/entity.utils";
 
-export type IEntityCreateDto<T> = Omit<T, 'id' | keyof IAuditColumnEntity>;
+export type IEntityCreateDto<T> = Omit<T, "id" | keyof IAuditColumnEntity>;
 
 export type IEntityUpdateDto<T> = Omit<
   Partial<T>,
-  'id' | keyof IAuditColumnEntity
+  "id" | keyof IAuditColumnEntity
 >;
 
 export type IEntityFilterIncludeData<K extends EntityList = EntityList> = {
   name: K;
   include: IEntityFilterData<EntityType<K>>;
+  columnKeys?: (keyof EntityType<K>)[];
 };
 
 export type IEntityFilterData<T> = {
   [K in keyof T]?: T[K][];
 } & {
+  columnKeys?: (keyof T)[];
   entities?: IEntityFilterIncludeData<EntityList>[];
 };
 
