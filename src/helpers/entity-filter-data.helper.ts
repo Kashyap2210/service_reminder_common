@@ -1,5 +1,5 @@
 import { ISearchV2Response } from "../types/generic.dto.types";
-import { entityListEntityModelMap } from "../utils";
+import { BadRequestException, entityListEntityModelMap } from "../utils";
 import {
   EntityList,
   EntityListEntityModelMap,
@@ -42,5 +42,41 @@ export class EntityFilterDataHelper {
     }
 
     return responseObj;
+  }
+
+  getEntityModelsByFilter<T extends EntityList>(
+    entityName: T,
+    filter: { key: keyof EntityType<T> & string; value: any[] },
+  ): EntityModelType<T>[] {
+    const filteredModels = this.getEntityModelsMap()[entityName].filter(
+      (model) => filter.value.includes(model[filter.key]),
+    );
+
+    if (filteredModels.length === 0) {
+      throw new BadRequestException({
+        key: `${filter.key}`,
+        message: `${entityName} with values: ${filter.value.join(", ")} not found. Please try with valid values.`,
+      });
+    }
+
+    return filteredModels;
+  }
+
+  getEntityModelByFilter<T extends EntityList>(
+    entityName: T,
+    filter: { key: keyof EntityType<T> & string; value: any },
+  ) {
+    const filteredModel = this.getEntityModelsMap()[entityName].filter(
+      (model) => model[filter.key] === filter.value,
+    );
+    if (filteredModel.length === 0) {
+      throw new BadRequestException({
+        key: `${filter.key}`,
+        message: `${entityName} with values: ${filter.value} not found. Please try with valid values.`,
+      });
+    }
+
+    // console.log("filteredModel", filteredModel);
+    return filteredModel[0];
   }
 }

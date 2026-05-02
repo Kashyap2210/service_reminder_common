@@ -8,4 +8,5 @@ export interface IVendorEntity extends IAuditColumnEntity {
   email: Nullable<string>;
   // recurringItemId: number; // <== recurringItemId
   userId: number;
+  address: string;
 }

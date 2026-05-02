@@ -9,7 +9,7 @@ export class RecurringItemModel implements IRecurringItemEntity {
   companyName: Nullable<string> = null;
   servicePeriod: number = 0;
   servicePeriodUnit: ServicePeriodUnit = ServicePeriodUnit.MONTHS;
-  servicePlaceAddress: Nullable<string> = null;
+  // servicePlaceAddress: Nullable<string> = null;
   userId: number = 0;
 
   createdOn: number = 0;
