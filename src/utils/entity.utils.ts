@@ -93,5 +93,5 @@ export type EntityModelType<T extends EntityList> = T extends EntityList.USER
                           : never;
 
 export type EntityListEntityModelMap = {
-  [T in EntityList]: EntityModelType<T>;
+  [T in EntityList]: EntityModelType<T>[];
 };
