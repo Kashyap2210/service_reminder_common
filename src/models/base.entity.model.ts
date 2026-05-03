@@ -18,6 +18,7 @@ export abstract class BaseEntityModel {
       // @ts-ignore
       const fkValue = this[mappingProperty];
       const bucket = searchResponse[entity] ?? [];
+      if (!bucket.length) continue;
       if (relationType === RelationType.ONE) {
         // @ts-ignore
         const match = bucket.find((e) => e[searchProperty] === fkValue);
