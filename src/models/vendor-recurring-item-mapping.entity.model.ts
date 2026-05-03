@@ -17,4 +17,8 @@ export class VendorRecurringItemMappingModel implements IVendorRecurringItemMapp
   ): VendorRecurringItemMappingModel {
     return Object.assign(new VendorRecurringItemMappingModel(), entity);
   }
+
+  static vendorIds(items: VendorRecurringItemMappingModel[]) {
+    return items.map((item) => item.vendorId);
+  }
 }
