@@ -5,9 +5,21 @@ import { appointmentFlowConfig } from "../flow-configs/appointment-flow.config";
 import { IAppointmentEntity } from "../interfaces/entities/appointment.entity.interface";
 import { IUserEntity } from "../interfaces/entities/user.entity.interface";
 import { Nullable } from "../types/types.generic";
-import { BadRequestException } from "../utils";
+import {
+  BadRequestException,
+  EntityList,
+  IModelRelationConfig,
+  RelationType,
+} from "../utils";
+import { BaseEntityModel } from "./base.entity.model";
+import { RecurringItemModel } from "./recurring-item.entity.model";
+import { UserModel } from "./user.entity.model";
+import { VendorModel } from "./vendor.entity.model";
 
-export class AppointmentModel implements IAppointmentEntity {
+export class AppointmentModel
+  extends BaseEntityModel
+  implements IAppointmentEntity
+{
   id: number = 0;
   appointmentDate: number = 0;
   recurringItemId: number = 0;
@@ -22,7 +34,36 @@ export class AppointmentModel implements IAppointmentEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  user?: UserModel;
+  recurringItem?: RecurringItemModel;
+  vendor?: VendorModel;
+
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.APPOINTMENT>>
+  > = {
+    [EntityList.USER]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "userId",
+      searchProperty: "id",
+      entity: EntityList.USER,
+    },
+    [EntityList.RECURRING_ITEM]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "recurringItemId",
+      searchProperty: "id",
+      entity: EntityList.RECURRING_ITEM,
+    },
+    [EntityList.VENDOR]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "vendorId",
+      searchProperty: "id",
+      entity: EntityList.VENDOR,
+    },
+  };
 
   static populateFromEntity(entity: IAppointmentEntity): AppointmentModel {
     return Object.assign(new AppointmentModel(), entity);

@@ -1,7 +1,11 @@
 import { EntityHistoryOperation } from "../enums";
 import { IServiceHistoryEntity } from "../interfaces";
+import { BaseEntityModel } from "./base.entity.model";
 
-export class ServiceHistoryModel implements IServiceHistoryEntity {
+export class ServiceHistoryModel
+  extends BaseEntityModel
+  implements IServiceHistoryEntity
+{
   id: number = 0;
   entityId: number = 0;
   data: string = "";
@@ -12,7 +16,11 @@ export class ServiceHistoryModel implements IServiceHistoryEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations = {};
 
   static populateFromEntity(
     entity: IServiceHistoryEntity,

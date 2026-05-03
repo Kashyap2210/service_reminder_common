@@ -5,9 +5,16 @@ import { serviceFlowConfig } from "../flow-configs/service-flow.config";
 import { IServiceEntity } from "../interfaces/entities/service.entity.interface";
 import { IUserEntity } from "../interfaces/entities/user.entity.interface";
 import { Nullable } from "../types/types.generic";
-import { BadRequestException } from "../utils";
+import { BadRequestException, EntityList, IModelRelationConfig, RelationType } from "../utils";
+import { AppointmentModel } from "./appointment.entity.model";
+import {
+  BaseEntityModel,
+} from "./base.entity.model";
+import { RecurringItemModel } from "./recurring-item.entity.model";
+import { UserModel } from "./user.entity.model";
+import { VendorModel } from "./vendor.entity.model";
 
-export class ServiceModel implements IServiceEntity {
+export class ServiceModel extends BaseEntityModel implements IServiceEntity {
   id: number = 0;
   appointmentId: number = 0;
   userId: number = 0;
@@ -26,7 +33,43 @@ export class ServiceModel implements IServiceEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  user?: UserModel;
+  recurringItem?: RecurringItemModel;
+  appointment?: AppointmentModel;
+  vendor?: VendorModel;
+
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.SERVICE>>
+  > = {
+    [EntityList.USER]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "userId",
+      searchProperty: "id",
+      entity: EntityList.USER,
+    },
+    [EntityList.RECURRING_ITEM]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "recurringItemId",
+      searchProperty: "id",
+      entity: EntityList.RECURRING_ITEM,
+    },
+    [EntityList.APPOINTMENT]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "appointmentId",
+      searchProperty: "id",
+      entity: EntityList.APPOINTMENT,
+    },
+    [EntityList.VENDOR]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "vendorId",
+      searchProperty: "id",
+      entity: EntityList.VENDOR,
+    },
+  };
 
   static populateFromEntity(entity: IServiceEntity): ServiceModel {
     return Object.assign(new ServiceModel(), entity);
