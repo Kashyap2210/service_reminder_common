@@ -18,8 +18,14 @@ import {
 export class EntityFilterDataHelper {
   constructor(private readonly searchResponse: ISearchV2Response) {}
 
-  getEntityFromList<T extends EntityList>(name: T): EntityType<T>[] {
-    return this.searchResponse[name] ?? [];
+  getEntityFromList<T extends EntityList>(name: T): EntityModelType<T>[] {
+    const populateFn = entityListEntityModelMap[name];
+    const data = this.searchResponse[name] ?? [];
+    return data.map((entity) =>
+      (populateFn as (e: typeof entity) => EntityModelType<typeof name>)(
+        entity,
+      ),
+    );
   }
 
   // getEntityModelsMap(): EntityListEntityModelMap {
