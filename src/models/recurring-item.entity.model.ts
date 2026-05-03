@@ -1,12 +1,16 @@
 import { ServicePeriodUnit } from "../enums";
 import { IRecurringItemEntity } from "../interfaces";
 import { Nullable } from "../types";
+import { EntityList, IModelRelationConfig, RelationType } from "../utils";
+import { BaseEntityModel } from "./base.entity.model";
 import { ServiceModel } from "./service.entity.model";
 import { UserModel } from "./user.entity.model";
-import { VendorRecurringItemMappingModel } from "./vendor-recurring-item-mapping.entity.model";
 import { VendorModel } from "./vendor.entity.model";
 
-export class RecurringItemModel implements IRecurringItemEntity {
+export class RecurringItemModel
+  extends BaseEntityModel
+  implements IRecurringItemEntity
+{
   id: number = 0;
   name: string = "";
   type: string = "";
@@ -25,53 +29,23 @@ export class RecurringItemModel implements IRecurringItemEntity {
   user?: UserModel;
   vendors?: VendorModel[];
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.RECURRING_ITEM>>
+  > = {
+    [EntityList.USER]: {
+      relationType: RelationType.ONE,
+      mappingProperty: "userId",
+      searchProperty: "id",
+      entity: EntityList.USER,
+    },
+  };
 
   static populateFromEntity(entity: IRecurringItemEntity): RecurringItemModel {
     return Object.assign(new RecurringItemModel(), entity);
-  }
-
-  /**
-   * Populates user, services and vendors on each recurring item model
-   * so callers never have to manually filter/find across separate arrays
-   * @param items - RecurringItemModels to populate
-   * @param users - All user models to match against userId
-   * @param services - All service models to match against recurringItemId
-   * @param vendors - All vendor models
-   * @param mappings - VendorRecurringItemMappings to resolve which vendors belong to which recurring item
-   */
-  static populateRelations(
-    items: RecurringItemModel[],
-    users: UserModel[],
-    services: ServiceModel[],
-    vendors: VendorModel[],
-    mappings: VendorRecurringItemMappingModel[],
-  ): void {
-    const userMap = new Map(users.map((u) => [u.id, u]));
-
-    const servicesByRecurringItemId = services.reduce((map, service) => {
-      const existing = map.get(service.recurringItemId) ?? [];
-      existing.push(service);
-      map.set(service.recurringItemId, existing);
-      return map;
-    }, new Map<number, ServiceModel[]>());
-
-    const vendorMap = new Map(vendors.map((v) => [v.id, v]));
-
-    const vendorIdsByRecurringItemId = mappings.reduce((map, mapping) => {
-      const existing = map.get(mapping.recurringItemId) ?? [];
-      existing.push(mapping.vendorId);
-      map.set(mapping.recurringItemId, existing);
-      return map;
-    }, new Map<number, number[]>());
-
-    for (const item of items) {
-      item.user = userMap.get(item.userId);
-      item.services = servicesByRecurringItemId.get(item.id) ?? [];
-      item.vendors = (vendorIdsByRecurringItemId.get(item.id) ?? [])
-        .map((vendorId) => vendorMap.get(vendorId))
-        .filter((v): v is VendorModel => v !== undefined);
-    }
   }
 
   get latestService(): ServiceModel {

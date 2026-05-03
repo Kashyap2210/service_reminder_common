@@ -1,7 +1,12 @@
 import { EntityHistoryOperation } from "../enums";
 import { IVendorHistoryEntity } from "../interfaces";
+import { EntityList, IModelRelationConfig } from "../utils";
+import { BaseEntityModel } from "./base.entity.model";
 
-export class VendorHistoryModel implements IVendorHistoryEntity {
+export class VendorHistoryModel
+  extends BaseEntityModel
+  implements IVendorHistoryEntity
+{
   id: number = 0;
   entityId: number = 0;
   data: string = "";
@@ -12,7 +17,13 @@ export class VendorHistoryModel implements IVendorHistoryEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.VENDOR>>
+  > = {};
 
   static populateFromEntity(entity: IVendorHistoryEntity): VendorHistoryModel {
     return Object.assign(new VendorHistoryModel(), entity);

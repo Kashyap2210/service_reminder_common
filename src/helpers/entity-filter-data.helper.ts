@@ -1,3 +1,4 @@
+import { BaseEntityModel } from "../models";
 import { ISearchV2Response } from "../types/generic.dto.types";
 import { BadRequestException, entityListEntityModelMap } from "../utils";
 import {
@@ -16,7 +17,11 @@ import {
  * - `getEntityFromList(name)` — returns typed entity array for the given `EntityList` key. e.g. `helper.getEntityFromList(EntityList.USER) // IUserEntity[]`
  */
 export class EntityFilterDataHelper {
-  constructor(private readonly searchResponse: ISearchV2Response) {}
+  entityModelsMap: EntityListEntityModelMap = {} as EntityListEntityModelMap;
+
+  constructor(private readonly searchResponse: ISearchV2Response) {
+    this.entityModelsMap = this.populateEntityModelsMap();
+  }
 
   getEntityFromList<T extends EntityList>(name: T): EntityModelType<T>[] {
     const populateFn = entityListEntityModelMap[name];
@@ -29,7 +34,7 @@ export class EntityFilterDataHelper {
   }
 
   // getEntityModelsMap(): EntityListEntityModelMap {
-  getEntityModelsMap(): EntityListEntityModelMap {
+  private populateEntityModelsMap(): EntityListEntityModelMap {
     const responseObj: EntityListEntityModelMap =
       {} as EntityListEntityModelMap;
 
@@ -54,8 +59,8 @@ export class EntityFilterDataHelper {
     entityName: T,
     filter: { key: keyof EntityType<T> & string; value: any[] },
   ): EntityModelType<T>[] {
-    const filteredModels = this.getEntityModelsMap()[entityName].filter(
-      (model) => filter.value.includes(model[filter.key]),
+    const filteredModels = this.entityModelsMap[entityName].filter((model) =>
+      filter.value.includes(model[filter.key]),
     );
 
     if (filteredModels.length === 0) {
@@ -72,7 +77,7 @@ export class EntityFilterDataHelper {
     entityName: T,
     filter: { key: keyof EntityType<T> & string; value: any },
   ) {
-    const filteredModel = this.getEntityModelsMap()[entityName].filter(
+    const filteredModel = this.entityModelsMap[entityName].filter(
       (model) => model[filter.key] === filter.value,
     );
     if (filteredModel.length === 0) {
@@ -84,5 +89,18 @@ export class EntityFilterDataHelper {
 
     // console.log("filteredModel", filteredModel);
     return filteredModel[0];
+  }
+
+  populateRelationsFor(entityNames: EntityList[]): EntityListEntityModelMap {
+    for (const entityName of entityNames) {
+      const models = this.entityModelsMap[entityName];
+      if (!models) continue;
+      for (const model of models) {
+        (model as unknown as BaseEntityModel).populateRelations(
+          this.searchResponse,
+        );
+      }
+    }
+    return this.entityModelsMap;
   }
 }
