@@ -1,8 +1,9 @@
 import { CronJobStatus } from "../enums";
 import { ICronJobEntity } from "../interfaces";
 import { Nullable } from "../types";
+import { BaseEntityModel } from "./base.entity.model";
 
-export class CronJobModel implements ICronJobEntity {
+export class CronJobModel extends BaseEntityModel implements ICronJobEntity {
   id: number = 0;
   name: string = "";
   cronExpression: string = "";
@@ -17,7 +18,11 @@ export class CronJobModel implements ICronJobEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations = {};
 
   static populateFromEntity(entity: ICronJobEntity): CronJobModel {
     return Object.assign(new CronJobModel(), entity);

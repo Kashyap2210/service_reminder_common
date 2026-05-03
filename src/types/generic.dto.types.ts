@@ -9,7 +9,7 @@ export type IEntityUpdateDto<T> = Omit<
   "id" | keyof IAuditColumnEntity
 >;
 
-export type IEntityFilterIncludeData<K extends EntityList = EntityList> = {
+export type IEntityFilterSearchData<K extends EntityList = EntityList> = {
   name: K;
   include: IEntityFilterData<EntityType<K>>;
   columnKeys?: (keyof EntityType<K>)[];
@@ -21,7 +21,8 @@ export type IEntityFilterData<T> = {
   [K in keyof T]?: T[K][];
 } & {
   columnKeys?: (keyof T)[];
-  entities?: IEntityFilterIncludeData<EntityList>[];
+  entities?: IEntityFilterSearchData<EntityList>[];
+  relations?: IEntityFilterSearchData<EntityList>[];
   orderBy?: Partial<Record<keyof T, OrderByDirection>>;
   limit?: number;
 };

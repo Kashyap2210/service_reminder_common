@@ -1,5 +1,6 @@
 export * from "./appointment-history.entity.model";
 export * from "./appointment.entity.model";
+export * from "./base.entity.model";
 export * from "./cron-job.entity.model";
 export * from "./notification.entity.model";
 export * from "./recurring-item-history.entity.model";

@@ -1,7 +1,12 @@
 import { EntityHistoryOperation } from "../enums";
 import { IAppointmentHistoryEntity } from "../interfaces";
+import { EntityList, IModelRelationConfig } from "../utils";
+import { BaseEntityModel,  } from "./base.entity.model";
 
-export class AppointmentHistoryModel implements IAppointmentHistoryEntity {
+export class AppointmentHistoryModel
+  extends BaseEntityModel
+  implements IAppointmentHistoryEntity
+{
   id: number = 0;
   entityId: number = 0;
   data: string = "";
@@ -12,7 +17,13 @@ export class AppointmentHistoryModel implements IAppointmentHistoryEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.APPOINTMENT_HISTORY>>
+  > = {};
 
   static populateFromEntity(
     entity: IAppointmentHistoryEntity,

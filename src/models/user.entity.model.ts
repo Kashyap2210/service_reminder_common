@@ -1,7 +1,9 @@
 import { UserRole } from "../enums";
 import { IUserEntity } from "../interfaces";
+import { EntityList, IModelRelationConfig } from "../utils";
+import { BaseEntityModel,  } from "./base.entity.model";
 
-export class UserModel implements IUserEntity {
+export class UserModel extends BaseEntityModel implements IUserEntity {
   id: number = 0;
   name: string = "";
   contactNo: string = "";
@@ -14,7 +16,13 @@ export class UserModel implements IUserEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.USER>>
+  > = {};
 
   static populateFromEntity(entity: IUserEntity): UserModel {
     return Object.assign(new UserModel(), entity);

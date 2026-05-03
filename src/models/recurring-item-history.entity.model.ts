@@ -1,7 +1,12 @@
 import { EntityHistoryOperation } from "../enums";
 import { IRecurringItemHistoryEntity } from "../interfaces";
+import { EntityList, IModelRelationConfig } from "../utils";
+import { BaseEntityModel,  } from "./base.entity.model";
 
-export class RecurringItemHistoryModel implements IRecurringItemHistoryEntity {
+export class RecurringItemHistoryModel
+  extends BaseEntityModel
+  implements IRecurringItemHistoryEntity
+{
   id: number = 0;
   entityId: number = 0;
   data: string = "";
@@ -12,7 +17,13 @@ export class RecurringItemHistoryModel implements IRecurringItemHistoryEntity {
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  private constructor() {}
+  protected constructor() {
+    super();
+  }
+
+  static relations: Partial<
+    Record<EntityList, IModelRelationConfig<EntityList.RECURRING_ITEM>>
+  > = {};
 
   static populateFromEntity(
     entity: IRecurringItemHistoryEntity,
