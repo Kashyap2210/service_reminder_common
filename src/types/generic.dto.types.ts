@@ -12,6 +12,7 @@ export type IEntityUpdateDto<T> = Omit<
 export type IEntityFilterSearchData<K extends EntityList = EntityList> = {
   name: K;
   include?: IEntityFilterData<EntityType<K>>;
+  relations?: IEntityFilterSearchData<EntityList>[];
   columnKeys?: (keyof EntityType<K>)[];
   orderBy?: Partial<Record<keyof EntityType<K>, OrderByDirection>>;
   limit?: number;

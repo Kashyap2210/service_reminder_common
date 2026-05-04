@@ -14,33 +14,39 @@ export abstract class BaseEntityModel {
   populateRelations(searchResponse: ISearchV2Response): this {
     const relations = (this.constructor as typeof BaseEntityModel).relations;
     for (const [prop, config] of Object.entries(relations)) {
-      const { relationType, mappingProperty, searchProperty, entity } = config;
+      const { relationType, mappingProperty, searchProperty, entity } = config!;
       // @ts-ignore
       const fkValue = this[mappingProperty];
       const bucket = searchResponse[entity] ?? [];
       if (!bucket.length) continue;
+
       if (relationType === RelationType.ONE) {
         // @ts-ignore
         const match = bucket.find((e) => e[searchProperty] === fkValue);
-        this[prop as keyof this] = match
-          ? (
-              entityListEntityModelMap[entity] as (
-                e: EntityType<EntityList>,
-              ) => any
-            )(match)
-          : undefined;
+        if (match) {
+          const hydrated = (
+            entityListEntityModelMap[entity] as (
+              e: EntityType<EntityList>,
+            ) => any
+          )(match);
+          // recursively populate relations on the hydrated model
+          hydrated.populateRelations(searchResponse);
+          this[prop as keyof this] = hydrated;
+        }
       } else {
         const matches = bucket.filter(
           (e: any) => e[searchProperty] === fkValue,
         );
-        // @ts-ignore
-        this[prop] = matches.map((e: EntityType<EntityList>) =>
-          (
+        this[prop as keyof this] = matches.map((e: EntityType<EntityList>) => {
+          const hydrated = (
             entityListEntityModelMap[entity] as (
               e: EntityType<EntityList>,
             ) => any
-          )(e),
-        );
+          )(e);
+          // recursively populate relations on each hydrated model
+          hydrated.populateRelations(searchResponse);
+          return hydrated;
+        }) as this[keyof this];
       }
     }
     return this;

@@ -42,6 +42,9 @@ export class EntityFilterDataHelper {
       const populateFn = entityListEntityModelMap[key];
       if (!populateFn) continue;
 
+      const raw = this.searchResponse[key];
+      if (!Array.isArray(raw)) continue;
+
       // @ts-expect-error - conditional type EntityModelType<T> cannot be resolved in loop context
       (responseObj[key] as EntityModelType<typeof key>[]) = this.searchResponse[
         key
