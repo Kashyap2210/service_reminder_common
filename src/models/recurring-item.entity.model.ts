@@ -42,6 +42,24 @@ export class RecurringItemModel
       searchProperty: "id",
       entity: EntityList.USER,
     },
+    [EntityList.VENDOR_RECURRING_ITEM_MAPPING]: {
+      relationType: RelationType.MANY,
+      mappingProperty: "id",
+      searchProperty: "recurringItemId",
+      entity: EntityList.VENDOR_RECURRING_ITEM_MAPPING,
+    },
+    [EntityList.SERVICE]: {
+      relationType: RelationType.MANY,
+      mappingProperty: "id",
+      searchProperty: "recurringItemId",
+      entity: EntityList.SERVICE,
+    },
+    [EntityList.APPOINTMENT]: {
+      relationType: RelationType.MANY,
+      mappingProperty: "id",
+      searchProperty: "recurringItemId",
+      entity: EntityList.APPOINTMENT,
+    },
   };
 
   static populateFromEntity(entity: IRecurringItemEntity): RecurringItemModel {
