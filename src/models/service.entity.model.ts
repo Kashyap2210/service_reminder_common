@@ -5,11 +5,14 @@ import { serviceFlowConfig } from "../flow-configs/service-flow.config";
 import { IServiceEntity } from "../interfaces/entities/service.entity.interface";
 import { IUserEntity } from "../interfaces/entities/user.entity.interface";
 import { Nullable } from "../types/types.generic";
-import { BadRequestException, EntityList, IModelRelationConfig, RelationType } from "../utils";
-import { AppointmentModel } from "./appointment.entity.model";
 import {
-  BaseEntityModel,
-} from "./base.entity.model";
+  BadRequestException,
+  EntityList,
+  IModelRelationConfig,
+  RelationType,
+} from "../utils";
+import { AppointmentModel } from "./appointment.entity.model";
+import { BaseEntityModel } from "./base.entity.model";
 import { RecurringItemModel } from "./recurring-item.entity.model";
 import { UserModel } from "./user.entity.model";
 import { VendorModel } from "./vendor.entity.model";

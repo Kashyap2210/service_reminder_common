@@ -94,6 +94,19 @@ export class EntityFilterDataHelper {
     return filteredModel[0];
   }
 
+  // populateRelationsFor(entityNames: EntityList[]): EntityListEntityModelMap {
+  //   for (const entityName of entityNames) {
+  //     const models = this.entityModelsMap[entityName];
+  //     if (!models) continue;
+  //     for (const model of models) {
+  //       (model as unknown as BaseEntityModel).populateRelations(
+  //         this.searchResponse,
+  //       );
+  //     }
+  //   }
+  //   return this.entityModelsMap;
+  // }
+
   populateRelationsFor(entityNames: EntityList[]): EntityListEntityModelMap {
     for (const entityName of entityNames) {
       const models = this.entityModelsMap[entityName];
@@ -101,6 +114,7 @@ export class EntityFilterDataHelper {
       for (const model of models) {
         (model as unknown as BaseEntityModel).populateRelations(
           this.searchResponse,
+          new Set<string>(), // fresh set per top-level model
         );
       }
     }
