@@ -55,6 +55,35 @@ export class DateCodeUtils {
     return `${newYear}${newMonth}${newDay}`;
   }
 
+  addDays(days: number): string {
+    const { year, month, day } = this.parseDateParts();
+
+    const date = new Date(year, month - 1, day);
+    date.setDate(date.getDate() + days);
+
+    const newYear = date.getFullYear();
+    const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+    const newDay = String(date.getDate()).padStart(2, "0");
+
+    return `${newYear}${newMonth}${newDay}`;
+  }
+
+  addWeeks(weeks: number): string {
+    return this.addDays(weeks * 7);
+  }
+
+  addYears(years: number): string {
+    const { year, month, day } = this.parseDateParts();
+
+    const date = new Date(year + years, month - 1, day);
+
+    const newYear = date.getFullYear();
+    const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+    const newDay = String(date.getDate()).padStart(2, "0");
+
+    return `${newYear}${newMonth}${newDay}`;
+  }
+
   private parseDateParts(): { year: number; month: number; day: number } {
     return {
       year: parseInt(this.stringifiedDateCode.substring(0, 4), 10),
