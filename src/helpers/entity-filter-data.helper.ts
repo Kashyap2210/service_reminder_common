@@ -23,8 +23,14 @@ export class EntityFilterDataHelper {
     this.entityModelsMap = this.populateEntityModelsMap();
   }
 
-  getEntityFromList<T extends EntityList>(name: T): EntityType<T>[] {
-    return this.searchResponse[name] ?? [];
+  getEntityFromList<T extends EntityList>(name: T): EntityModelType<T>[] {
+    const populateFn = entityListEntityModelMap[name];
+    const data = this.searchResponse[name] ?? [];
+    return data.map((entity) =>
+      (populateFn as (e: typeof entity) => EntityModelType<typeof name>)(
+        entity,
+      ),
+    );
   }
 
   // getEntityModelsMap(): EntityListEntityModelMap {
@@ -35,6 +41,9 @@ export class EntityFilterDataHelper {
     for (const key of Object.keys(this.searchResponse) as EntityList[]) {
       const populateFn = entityListEntityModelMap[key];
       if (!populateFn) continue;
+
+      const raw = this.searchResponse[key];
+      if (!Array.isArray(raw)) continue;
 
       // @ts-expect-error - conditional type EntityModelType<T> cannot be resolved in loop context
       (responseObj[key] as EntityModelType<typeof key>[]) = this.searchResponse[
@@ -85,6 +94,19 @@ export class EntityFilterDataHelper {
     return filteredModel[0];
   }
 
+  // populateRelationsFor(entityNames: EntityList[]): EntityListEntityModelMap {
+  //   for (const entityName of entityNames) {
+  //     const models = this.entityModelsMap[entityName];
+  //     if (!models) continue;
+  //     for (const model of models) {
+  //       (model as unknown as BaseEntityModel).populateRelations(
+  //         this.searchResponse,
+  //       );
+  //     }
+  //   }
+  //   return this.entityModelsMap;
+  // }
+
   populateRelationsFor(entityNames: EntityList[]): EntityListEntityModelMap {
     for (const entityName of entityNames) {
       const models = this.entityModelsMap[entityName];
@@ -92,6 +114,7 @@ export class EntityFilterDataHelper {
       for (const model of models) {
         (model as unknown as BaseEntityModel).populateRelations(
           this.searchResponse,
+          new Set<string>(), // fresh set per top-level model
         );
       }
     }

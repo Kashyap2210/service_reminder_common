@@ -1,11 +1,13 @@
 import { NotificationStatus, NotificationType } from "../enums";
-import { INotificationEntity, INotificationPayload } from "../interfaces";
+import {
+  INotificationEntity,
+  INotificationPayload,
+  IUserEntity,
+} from "../interfaces";
 import { Nullable } from "../types";
 import { EntityList, IModelRelationConfig, RelationType } from "../utils";
 import { AppointmentModel } from "./appointment.entity.model";
-import {
-  BaseEntityModel,
-} from "./base.entity.model";
+import { BaseEntityModel } from "./base.entity.model";
 import { RecurringItemModel } from "./recurring-item.entity.model";
 import { UserModel } from "./user.entity.model";
 
@@ -41,6 +43,29 @@ export class NotificationModel
 
   protected constructor() {
     super();
+  }
+
+  static getNewNotificationEntity(
+    currentUser: IUserEntity,
+    recurringItemModel: RecurringItemModel,
+    payload: INotificationPayload,
+  ): INotificationEntity {
+    const notificationEntity = new NotificationModel();
+    (((notificationEntity.id = 0),
+    (notificationEntity.userId = recurringItemModel.userId),
+    (notificationEntity.recurringItemId = recurringItemModel.id),
+    (notificationEntity.appointmentId = null),
+    (notificationEntity.type = NotificationType.EMAIL_SERVICE_REMINDER),
+    (notificationEntity.status = NotificationStatus.PENDING),
+    (notificationEntity.scheduledFor = 0),
+    (notificationEntity.sentAt = null),
+    (notificationEntity.retryCount = 0),
+    (notificationEntity.lastError = null),
+    (notificationEntity.payload = payload)),
+      (notificationEntity.createdBy = currentUser.id),
+      (notificationEntity.updatedBy = currentUser.id));
+
+    return notificationEntity;
   }
 
   static populateFromEntity(entity: INotificationEntity): NotificationModel {

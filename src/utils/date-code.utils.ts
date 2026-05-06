@@ -20,9 +20,7 @@ export class DateCodeUtils {
   isValidYYYYMMDD(): boolean {
     if (!/^\d{8}$/.test(this.stringifiedDateCode)) return false;
 
-    const year = parseInt(this.stringifiedDateCode.substring(0, 4), 10);
-    const month = parseInt(this.stringifiedDateCode.substring(4, 6), 10);
-    const day = parseInt(this.stringifiedDateCode.substring(6, 8), 10);
+    const { year, month, day } = this.parseDateParts();
 
     if (month < 1 || month > 12) return false;
     if (day < 1 || day > 31) return false;
@@ -36,10 +34,7 @@ export class DateCodeUtils {
   }
 
   toLongDateString(): string {
-    const s = this.stringifiedDateCode;
-    const year = parseInt(s.substring(0, 4), 10);
-    const month = parseInt(s.substring(4, 6), 10);
-    const day = parseInt(s.substring(6, 8), 10);
+    const { year, month, day } = this.parseDateParts();
 
     return new Date(year, month - 1, day).toLocaleDateString("en-US", {
       year: "numeric",
@@ -48,7 +43,66 @@ export class DateCodeUtils {
     });
   }
 
+  addMonths(months: number): string {
+    const { year, month, day } = this.parseDateParts();
+
+    const date = new Date(year, month - 1 + months, day);
+
+    const newYear = date.getFullYear();
+    const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+    const newDay = String(date.getDate()).padStart(2, "0");
+
+    return `${newYear}${newMonth}${newDay}`;
+  }
+
+  addDays(days: number): string {
+    const { year, month, day } = this.parseDateParts();
+
+    const date = new Date(year, month - 1, day);
+    date.setDate(date.getDate() + days);
+
+    const newYear = date.getFullYear();
+    const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+    const newDay = String(date.getDate()).padStart(2, "0");
+
+    return `${newYear}${newMonth}${newDay}`;
+  }
+
+  addWeeks(weeks: number): string {
+    return this.addDays(weeks * 7);
+  }
+
+  addYears(years: number): string {
+    const { year, month, day } = this.parseDateParts();
+
+    const date = new Date(year + years, month - 1, day);
+
+    const newYear = date.getFullYear();
+    const newMonth = String(date.getMonth() + 1).padStart(2, "0");
+    const newDay = String(date.getDate()).padStart(2, "0");
+
+    return `${newYear}${newMonth}${newDay}`;
+  }
+
+  private parseDateParts(): { year: number; month: number; day: number } {
+    return {
+      year: parseInt(this.stringifiedDateCode.substring(0, 4), 10),
+      month: parseInt(this.stringifiedDateCode.substring(4, 6), 10),
+      day: parseInt(this.stringifiedDateCode.substring(6, 8), 10),
+    };
+  }
+
   static getCurrentYear(): number {
     return new Date().getFullYear();
+  }
+
+  static daysDiff(dateCode: string | number): number {
+    const { year, month, day } = new DateCodeUtils(dateCode).parseDateParts();
+    const target = new Date(year, month - 1, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const diffMs = target.getTime() - today.getTime();
+    return Math.round(diffMs / (1000 * 60 * 60 * 24));
   }
 }
