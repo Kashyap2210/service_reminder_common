@@ -105,4 +105,12 @@ export class DateCodeUtils {
     const diffMs = target.getTime() - today.getTime();
     return Math.round(diffMs / (1000 * 60 * 60 * 24));
   }
+
+  static getCurrentDateCode(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}${month}${day}`;
+  }
 }
