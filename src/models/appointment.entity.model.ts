@@ -104,4 +104,12 @@ export class AppointmentModel
 
     return actionConfig.next();
   }
+
+  get recurringItemName() {
+    return this.recurringItem?.name;
+  }
+
+  get vendorName() {
+    return this.vendor?.name;
+  }
 }
