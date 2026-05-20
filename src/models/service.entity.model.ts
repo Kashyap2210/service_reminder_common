@@ -117,4 +117,12 @@ export class ServiceModel extends BaseEntityModel implements IServiceEntity {
 
     return actionConfig.next();
   }
+
+  get vendorName() {
+    return this.vendor?.name;
+  }
+
+  get recurringItemName() {
+    return this.recurring_item?.name;
+  }
 }
