@@ -37,7 +37,7 @@ export class ServiceModel extends BaseEntityModel implements IServiceEntity {
   updatedBy: number = 0;
 
   user?: UserModel;
-  recurringItem?: RecurringItemModel;
+  recurring_item?: RecurringItemModel;
   appointment?: AppointmentModel;
   vendor?: VendorModel;
 
