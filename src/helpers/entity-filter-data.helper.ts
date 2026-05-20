@@ -120,4 +120,21 @@ export class EntityFilterDataHelper {
     }
     return this.entityModelsMap;
   }
+
+  mergeEntity<T extends EntityList>(
+    entityName: T,
+    savedEntity: EntityType<T>,
+  ): EntityModelType<T> {
+    const populateFn = entityListEntityModelMap[entityName];
+    const model = (populateFn as (e: EntityType<T>) => EntityModelType<T>)(
+      savedEntity,
+    );
+
+    (model as unknown as BaseEntityModel).populateRelations(
+      this.searchResponse,
+      new Set<string>(),
+    );
+
+    return model;
+  }
 }

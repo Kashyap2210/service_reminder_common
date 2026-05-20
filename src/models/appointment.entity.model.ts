@@ -35,7 +35,7 @@ export class AppointmentModel
   updatedBy: number = 0;
 
   user?: UserModel;
-  recurringItem?: RecurringItemModel;
+  recurring_item?: RecurringItemModel;
   vendor?: VendorModel;
 
   protected constructor() {
@@ -103,5 +103,13 @@ export class AppointmentModel
     }
 
     return actionConfig.next();
+  }
+
+  get recurringItemName() {
+    return this.recurring_item?.name;
+  }
+
+  get vendorName() {
+    return this.vendor?.name;
   }
 }
