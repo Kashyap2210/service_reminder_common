@@ -21,12 +21,25 @@ export type IEntityFilterSearchData<K extends EntityList = EntityList> = {
 export type IEntityFilterData<T> = {
   [K in keyof T]?: T[K][];
 } & {
+  include?: IEntityFilterData<EntityType<EntityList>>;
   columnKeys?: (keyof T)[];
   entities?: IEntityFilterSearchData<EntityList>[];
   relations?: IEntityFilterSearchData<EntityList>[];
   orderBy?: Partial<Record<keyof T, OrderByDirection>>;
   limit?: number;
 };
+
+export interface IEntityFilterSearchDataV2<K extends EntityList = EntityList> {
+  /**
+   * Root entity being queried
+   */
+  name: K;
+
+  /**
+   * Query configuration + filters
+   */
+  filter?: IEntityFilterData<EntityType<K>>;
+}
 
 export type ISearchV2Response = {
   [key in EntityList]?: EntityType<key>[];
