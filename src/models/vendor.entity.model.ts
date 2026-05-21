@@ -39,6 +39,12 @@ export class VendorModel extends BaseEntityModel implements IVendorEntity {
       searchProperty: "id",
       entity: EntityList.USER,
     },
+    [EntityList.VENDOR_RECURRING_ITEM_MAPPING]: {
+      relationType: RelationType.MANY,
+      mappingProperty: "id",
+      searchProperty: "vendorId",
+      entity: EntityList.VENDOR_RECURRING_ITEM_MAPPING,
+    },
   };
 
   static populateFromEntity(entity: IVendorEntity): VendorModel {
