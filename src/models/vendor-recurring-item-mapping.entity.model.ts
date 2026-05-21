@@ -18,7 +18,7 @@ export class VendorRecurringItemMappingModel
   updatedBy: number = 0;
 
   vendor?: VendorModel;
-  recurringItem?: RecurringItemModel;
+  [EntityList.RECURRING_ITEM]?: RecurringItemModel;
 
   protected constructor() {
     super();
