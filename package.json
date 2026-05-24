@@ -1,6 +1,6 @@
 {
   "name": "service_reminder_common",
-  "version": "4.0.2-beta.6",
+  "version": "4.0.2-beta.10",
   "description": "",
   "homepage": "https://github.com/Kashyap2210/service_reminder_common#readme",
   "bugs": {
@@ -19,6 +19,13 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsup",

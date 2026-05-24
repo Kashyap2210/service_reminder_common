@@ -96,3 +96,7 @@ export function groupBy<T>(items: T[], key: keyof T): Map<string, T[]> {
   }
   return result;
 }
+
+export function definedValues<T>(arr: Array<T | undefined | null>): T[] {
+  return arr.filter((value): value is T => value != null);
+}

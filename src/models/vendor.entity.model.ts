@@ -1,10 +1,14 @@
 import { IVendorEntity } from "../interfaces";
 import { Nullable } from "../types";
-import { EntityList, IModelRelationConfig, RelationType } from "../utils";
 import {
-  BaseEntityModel,
-} from "./base.entity.model";
+  definedValues,
+  EntityList,
+  IModelRelationConfig,
+  RelationType,
+} from "../utils";
+import { BaseEntityModel } from "./base.entity.model";
 import { UserModel } from "./user.entity.model";
+import { VendorRecurringItemMappingModel } from "./vendor-recurring-item-mapping.entity.model";
 
 export class VendorModel extends BaseEntityModel implements IVendorEntity {
   id: number = 0;
@@ -20,6 +24,7 @@ export class VendorModel extends BaseEntityModel implements IVendorEntity {
   updatedBy: number = 0;
 
   user?: UserModel;
+  [EntityList.VENDOR_RECURRING_ITEM_MAPPING]?: VendorRecurringItemMappingModel[];
 
   protected constructor() {
     super();
@@ -34,9 +39,27 @@ export class VendorModel extends BaseEntityModel implements IVendorEntity {
       searchProperty: "id",
       entity: EntityList.USER,
     },
+    [EntityList.VENDOR_RECURRING_ITEM_MAPPING]: {
+      relationType: RelationType.MANY,
+      mappingProperty: "id",
+      searchProperty: "vendorId",
+      entity: EntityList.VENDOR_RECURRING_ITEM_MAPPING,
+    },
   };
 
   static populateFromEntity(entity: IVendorEntity): VendorModel {
     return Object.assign(new VendorModel(), entity);
+  }
+
+  get recurringItems() {
+    return definedValues(
+      this[EntityList.VENDOR_RECURRING_ITEM_MAPPING]?.map(
+        (item) => item[EntityList.RECURRING_ITEM],
+      ) ?? [],
+    );
+  }
+
+  get recurringItemNames() {
+    return this.recurringItems?.map((item) => item?.name);
   }
 }

@@ -5,7 +5,7 @@ import { EntityList, IModelRelationConfig, RelationType } from "../utils";
 import { BaseEntityModel } from "./base.entity.model";
 import { ServiceModel } from "./service.entity.model";
 import { UserModel } from "./user.entity.model";
-import { VendorModel } from "./vendor.entity.model";
+import { VendorRecurringItemMappingModel } from "./vendor-recurring-item-mapping.entity.model";
 
 export class RecurringItemModel
   extends BaseEntityModel
@@ -27,7 +27,8 @@ export class RecurringItemModel
 
   services?: ServiceModel[];
   user?: UserModel;
-  vendors?: VendorModel[];
+  // vendors?: VendorModel[];
+  [EntityList.VENDOR_RECURRING_ITEM_MAPPING]?: VendorRecurringItemMappingModel[];
 
   protected constructor() {
     super();
@@ -79,5 +80,11 @@ export class RecurringItemModel
 
   static getRecurringItemUserIds(items: RecurringItemModel[]): number[] {
     return items.map((item) => item["userId"]);
+  }
+
+  get vendors() {
+    return this[EntityList.VENDOR_RECURRING_ITEM_MAPPING]?.map(
+      (item) => item.vendor,
+    );
   }
 }
