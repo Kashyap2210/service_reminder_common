@@ -1,7 +1,8 @@
-import { ServicePeriodUnit } from "../enums";
+import { AppointmentType, ServicePeriodUnit } from "../enums";
 import { IRecurringItemEntity } from "../interfaces";
 import { Nullable } from "../types";
 import { EntityList, IModelRelationConfig, RelationType } from "../utils";
+import { AppointmentModel } from "./appointment.entity.model";
 import { BaseEntityModel } from "./base.entity.model";
 import { ServiceModel } from "./service.entity.model";
 import { UserModel } from "./user.entity.model";
@@ -25,10 +26,12 @@ export class RecurringItemModel
   createdBy: number = 0;
   updatedBy: number = 0;
 
-  services?: ServiceModel[];
+  // services?: ServiceModel[];
   user?: UserModel;
   // vendors?: VendorModel[];
   [EntityList.VENDOR_RECURRING_ITEM_MAPPING]?: VendorRecurringItemMappingModel[];
+  [EntityList.SERVICE]?: ServiceModel[];
+  [EntityList.APPOINTMENT]?: AppointmentModel[];
 
   protected constructor() {
     super();
@@ -69,8 +72,9 @@ export class RecurringItemModel
 
   get latestService(): ServiceModel {
     return (
-      this.services?.sort((a, b) => b.serviceDate - a.serviceDate)[0] ??
-      ({} as ServiceModel)
+      (this[EntityList.SERVICE] ?? [])?.sort(
+        (a, b) => b.serviceDate - a.serviceDate,
+      )[0] ?? ({} as ServiceModel)
     );
   }
 
@@ -85,6 +89,14 @@ export class RecurringItemModel
   get vendors() {
     return this[EntityList.VENDOR_RECURRING_ITEM_MAPPING]?.map(
       (item) => item.vendor,
+    );
+  }
+
+  getAppointmentByTypeAndRecurringItemId(type: AppointmentType) {
+    return (
+      this[EntityList.APPOINTMENT]?.filter(
+        (appointment) => appointment.appointmentType === type,
+      )[0] ?? ({} as AppointmentModel)
     );
   }
 }
