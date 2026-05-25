@@ -8,4 +8,5 @@ export * from "./notification-type.enum";
 export * from "./service-action.enum";
 export * from "./service-period-unit.enum";
 export * from "./service-status.enum";
+export * from "./user-status.enum";
 export * from "./user.role.enum";
