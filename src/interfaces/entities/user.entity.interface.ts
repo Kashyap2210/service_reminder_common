@@ -1,4 +1,4 @@
-import { UserRole } from "../../enums";
+import { UserRole, UserStatus } from "../../enums";
 import { IAuditColumnEntity } from "../../helpers";
 
 export interface IUserEntity extends IAuditColumnEntity {
@@ -8,4 +8,5 @@ export interface IUserEntity extends IAuditColumnEntity {
   email: string;
   password: string;
   role: UserRole;
+  status: UserStatus;
 }

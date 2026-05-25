@@ -1,4 +1,4 @@
-import { UserRole } from "../enums";
+import { UserRole, UserStatus } from "../enums";
 import { IUserEntity } from "../interfaces";
 import {
   definedValues,
@@ -20,6 +20,7 @@ export class UserModel extends BaseEntityModel implements IUserEntity {
   email: string = "";
   password: string = "";
   role: UserRole = UserRole.USER;
+  status: UserStatus = UserStatus.ACTIVE;
 
   createdOn: number = 0;
   updatedOn: number = 0;
@@ -39,28 +40,28 @@ export class UserModel extends BaseEntityModel implements IUserEntity {
     Record<EntityList, IModelRelationConfig<EntityList.USER>>
   > = {
     [EntityList.APPOINTMENT]: {
-      relationType: RelationType.ONE,
+      relationType: RelationType.MANY,
       mappingProperty: "id",
       searchProperty: "userId",
       entity: EntityList.APPOINTMENT,
     },
     [EntityList.RECURRING_ITEM]: {
-      relationType: RelationType.ONE,
+      relationType: RelationType.MANY,
       mappingProperty: "id",
       searchProperty: "userId",
-      entity: EntityList.APPOINTMENT,
+      entity: EntityList.RECURRING_ITEM,
     },
     [EntityList.SERVICE]: {
-      relationType: RelationType.ONE,
+      relationType: RelationType.MANY,
       mappingProperty: "id",
       searchProperty: "userId",
-      entity: EntityList.APPOINTMENT,
+      entity: EntityList.SERVICE,
     },
     [EntityList.NOTIFICATION]: {
-      relationType: RelationType.ONE,
+      relationType: RelationType.MANY,
       mappingProperty: "id",
       searchProperty: "userId",
-      entity: EntityList.APPOINTMENT,
+      entity: EntityList.NOTIFICATION,
     },
   };
 
@@ -81,29 +82,37 @@ export class UserModel extends BaseEntityModel implements IUserEntity {
   }
 
   get recurringItemIds() {
-    return (
-      this[EntityList.RECURRING_ITEM]?.map((item) => item.id) ??
-      ([] as number[])
-    );
+    return this.extractIds(this[EntityList.RECURRING_ITEM]);
   }
 
   get serviceIds() {
-    return this[EntityList.SERVICE]?.map((item) => item.id) ?? ([] as number[]);
+    return this.extractIds(this[EntityList.SERVICE]);
   }
 
   get notificationIds() {
-    return (
-      this[EntityList.NOTIFICATION]?.map((item) => item.id) ?? ([] as number[])
-    );
+    return this.extractIds(this[EntityList.NOTIFICATION]);
   }
 
   get appointmentIds() {
-    return (
-      this[EntityList.APPOINTMENT]?.map((item) => item.id) ?? ([] as number[])
-    );
+    return this.extractIds(this[EntityList.APPOINTMENT]);
   }
 
   get vendorIds() {
-    return this.vendors.map((vendor) => vendor.id);
+    return this.extractIds(this.vendors);
+  }
+
+  private extractIds<T extends { id: number }>(items?: T[]): Array<T["id"]> {
+    return items?.map((item) => item.id) ?? [];
+  }
+
+  get vendorRecurringItemMappingIds(): number[] {
+    return (
+      this[EntityList.RECURRING_ITEM]?.flatMap(
+        (item) =>
+          item[EntityList.VENDOR_RECURRING_ITEM_MAPPING]?.map(
+            (mapping) => mapping.id,
+          ) ?? [],
+      ) ?? []
+    );
   }
 }

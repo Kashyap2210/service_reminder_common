@@ -1,3 +1,4 @@
+import { UserStatus } from "../../enums";
 import {
   IEntityCreateDto,
   IEntityFilterData,
@@ -5,13 +6,18 @@ import {
 } from "../../types";
 import { EntityList, EntityType } from "../../utils";
 
-export interface IUserCreateDto extends IEntityCreateDto<
-  EntityType<EntityList.USER>
+export type IUserDtoExclude = "status" | "role";
+export interface IUserCreateDto extends Omit<
+  IEntityCreateDto<EntityType<EntityList.USER>>,
+  IUserDtoExclude
 > {}
 
-export interface IUserUpdateDto extends IEntityUpdateDto<
-  EntityType<EntityList.USER>
-> {}
+export interface IUserUpdateDto extends Omit<
+  IEntityUpdateDto<EntityType<EntityList.USER>>,
+  IUserDtoExclude
+> {
+  status?: UserStatus;
+}
 
 export interface IUserSearchDto extends IEntityFilterData<
   EntityType<EntityList.USER>
